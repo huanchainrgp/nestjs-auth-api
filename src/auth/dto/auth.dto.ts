@@ -74,17 +74,20 @@ export class UserResponseDto {
   @ApiProperty({ example: 'user@example.com', description: 'User email address' })
   email: string;
 
-  @ApiProperty({ example: 'John', description: 'User first name' })
-  firstName?: string;
+  @ApiProperty({ example: 'John', description: 'User first name', required: false })
+  firstName?: string | null;
 
-  @ApiProperty({ example: 'Doe', description: 'User last name' })
-  lastName?: string;
+  @ApiProperty({ example: 'Doe', description: 'User last name', required: false })
+  lastName?: string | null;
 
   @ApiProperty({ example: 'user', description: 'User role', enum: UserRole })
   role: UserRole;
 
   @ApiProperty({ example: '2023-01-01T00:00:00.000Z', description: 'Account creation date' })
   createdAt: Date;
+
+  @ApiProperty({ example: '2023-01-01T00:00:00.000Z', description: 'Last update date' })
+  updatedAt: Date;
 }
 
 export class AuthResponseDto {
