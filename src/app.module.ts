@@ -13,10 +13,13 @@ import { User } from './user/user.entity';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'database.sqlite',
+      type: 'postgres',
+      url: process.env.DATABASE_URL,
       entities: [User],
       synchronize: true, // Set to false in production
+      ssl: {
+        rejectUnauthorized: false,
+      },
     }),
     AuthModule,
     UserModule,

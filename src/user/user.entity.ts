@@ -24,7 +24,8 @@ export class User {
   lastName: string;
 
   @Column({
-    type: 'text',
+    type: 'enum',
+    enum: UserRole,
     default: UserRole.USER
   })
   role: UserRole;
