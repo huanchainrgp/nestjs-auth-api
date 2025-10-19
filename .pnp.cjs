@@ -44,7 +44,7 @@ const RAW_RUNTIME_STATE =
           ["@types/bcryptjs", "npm:2.4.6"],\
           ["@types/express", "npm:5.0.3"],\
           ["@types/jest", "npm:30.0.0"],\
-          ["@types/node", "npm:22.18.11"],\
+          ["@types/node", "npm:24.8.1"],\
           ["@types/passport-jwt", "npm:4.0.1"],\
           ["@types/passport-local", "npm:1.0.38"],\
           ["@types/supertest", "npm:6.0.3"],\
@@ -3013,14 +3013,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/node", [\
-      ["npm:22.18.11", {\
-        "packageLocation": "../../../.yarn/berry/cache/@types-node-npm-22.18.11-c8eaafe47a-10c0.zip/node_modules/@types/node/",\
-        "packageDependencies": [\
-          ["@types/node", "npm:22.18.11"],\
-          ["undici-types", "npm:6.21.0"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:24.8.1", {\
         "packageLocation": "../../../.yarn/berry/cache/@types-node-npm-24.8.1-bc0371b5f2-10c0.zip/node_modules/@types/node/",\
         "packageDependencies": [\
@@ -8438,7 +8430,7 @@ const RAW_RUNTIME_STATE =
           ["@types/bcryptjs", "npm:2.4.6"],\
           ["@types/express", "npm:5.0.3"],\
           ["@types/jest", "npm:30.0.0"],\
-          ["@types/node", "npm:22.18.11"],\
+          ["@types/node", "npm:24.8.1"],\
           ["@types/passport-jwt", "npm:4.0.1"],\
           ["@types/passport-local", "npm:1.0.38"],\
           ["@types/supertest", "npm:6.0.3"],\
@@ -10321,7 +10313,7 @@ const RAW_RUNTIME_STATE =
           ["@tsconfig/node12", "npm:1.0.11"],\
           ["@tsconfig/node14", "npm:1.0.3"],\
           ["@tsconfig/node16", "npm:1.0.4"],\
-          ["@types/node", "npm:22.18.11"],\
+          ["@types/node", "npm:24.8.1"],\
           ["@types/swc__core", null],\
           ["@types/swc__wasm", null],\
           ["@types/typescript", null],\
@@ -10644,13 +10636,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["undici-types", [\
-      ["npm:6.21.0", {\
-        "packageLocation": "../../../.yarn/berry/cache/undici-types-npm-6.21.0-eb2b0ed56a-10c0.zip/node_modules/undici-types/",\
-        "packageDependencies": [\
-          ["undici-types", "npm:6.21.0"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:7.14.0", {\
         "packageLocation": "../../../.yarn/berry/cache/undici-types-npm-7.14.0-d9eb643e6a-10c0.zip/node_modules/undici-types/",\
         "packageDependencies": [\

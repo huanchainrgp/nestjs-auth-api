@@ -1,17 +1,20 @@
 # NestJS Authentication API
 
-A complete NestJS REST API with user authentication, JWT tokens, and Swagger documentation.
+A complete NestJS REST API with user authentication, JWT tokens, role-based access control, and Swagger documentation.
 
 ## Features
 
 - ✅ User Registration
 - ✅ User Login
 - ✅ JWT Authentication
+- ✅ **Role-Based Access Control (RBAC)**
+- ✅ **Admin & Super Admin Roles**
 - ✅ Protected Routes
 - ✅ Swagger API Documentation
 - ✅ TypeORM with SQLite
 - ✅ Input Validation
 - ✅ Password Hashing with bcrypt
+- ✅ **User Management (Admin Only)**
 
 ## Tech Stack
 
@@ -94,13 +97,31 @@ Content-Type: application/json
     "email": "user@example.com",
     "firstName": "John",
     "lastName": "Doe",
+    "role": "user",
     "createdAt": "2023-01-01T00:00:00.000Z",
     "updatedAt": "2023-01-01T00:00:00.000Z"
   }
 }
 ```
 
-#### 2. Login
+#### 2. Register an Admin User
+```http
+POST /auth/register-admin
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "admin123456",
+  "firstName": "Admin",
+  "lastName": "User",
+  "role": "admin",
+  "adminSecret": "super-secret-admin-key"
+}
+```
+
+**Note:** Requires the admin secret key from `.env` file.
+
+#### 3. Login
 ```http
 POST /auth/login
 Content-Type: application/json
@@ -120,13 +141,14 @@ Content-Type: application/json
     "email": "user@example.com",
     "firstName": "John",
     "lastName": "Doe",
+    "role": "user",
     "createdAt": "2023-01-01T00:00:00.000Z",
     "updatedAt": "2023-01-01T00:00:00.000Z"
   }
 }
 ```
 
-#### 3. Get User Profile (Protected)
+#### 4. Get User Profile (Protected)
 ```http
 GET /auth/profile
 Authorization: Bearer <access_token>
@@ -139,10 +161,38 @@ Authorization: Bearer <access_token>
   "email": "user@example.com",
   "firstName": "John",
   "lastName": "Doe",
+  "role": "user",
   "createdAt": "2023-01-01T00:00:00.000Z",
   "updatedAt": "2023-01-01T00:00:00.000Z"
 }
 ```
+
+### Admin Endpoints
+
+#### 5. Get All Users (Admin Only)
+```http
+GET /auth/users
+Authorization: Bearer <admin_access_token>
+```
+
+#### 6. Delete User (Super Admin Only)
+```http
+DELETE /auth/users/:id
+Authorization: Bearer <super_admin_access_token>
+```
+
+#### 7. Update User Role (Super Admin Only)
+```http
+PATCH /auth/users/:id/role
+Authorization: Bearer <super_admin_access_token>
+Content-Type: application/json
+
+{
+  "role": "admin"
+}
+```
+
+📖 **For detailed admin documentation, see [ADMIN_GUIDE.md](./ADMIN_GUIDE.md)**
 
 ## Testing with cURL
 
@@ -224,85 +274,14 @@ To switch to PostgreSQL or MySQL, update the TypeORM configuration in `src/app.m
 | `PORT` | Server port | `3000` |
 | `JWT_SECRET` | Secret key for JWT signing | `your-secret-key` |
 | `JWT_EXPIRES_IN` | JWT token expiration time | `24h` |
+| `ADMIN_SECRET` | Secret key for admin registration | `super-secret-admin-key` |
+
+## User Roles
+
+- **USER** - Regular user (default)
+- **ADMIN** - Admin user with elevated privileges  
+- **SUPER_ADMIN** - Super admin with full system access
 
 ## License
 
 MIT
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
