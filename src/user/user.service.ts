@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { PrismaService } from '../prisma/prisma.service';
 import { User, UserRole } from './user.entity';
 import { RegisterDto, RegisterAdminDto } from '../auth/dto/auth.dto';
 import * as bcrypt from 'bcryptjs';
@@ -8,8 +7,7 @@ import * as bcrypt from 'bcryptjs';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private prisma: PrismaService,
   ) {}
 
   async create(registerDto: RegisterDto, role: UserRole = UserRole.USER): Promise<User> {
@@ -19,15 +17,15 @@ export class UserService {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const user = this.userRepository.create({
-      email,
-      password: hashedPassword,
-      firstName,
-      lastName,
-      role,
+    return this.prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        firstName,
+        lastName,
+        role,
+      },
     });
-
-    return this.userRepository.save(user);
   }
 
   async createAdmin(registerAdminDto: RegisterAdminDto): Promise<User> {
@@ -37,28 +35,37 @@ export class UserService {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const user = this.userRepository.create({
-      email,
-      password: hashedPassword,
-      firstName,
-      lastName,
-      role: role || UserRole.ADMIN,
+    return this.prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        firstName,
+        lastName,
+        role: role || UserRole.ADMIN,
+      },
     });
-
-    return this.userRepository.save(user);
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.userRepository.findOne({ where: { email } });
+    return this.prisma.user.findUnique({ where: { email } });
   }
 
   async findById(id: number): Promise<User | null> {
-    return this.userRepository.findOne({ where: { id } });
+    return this.prisma.user.findUnique({ where: { id } });
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find({
-      select: ['id', 'email', 'firstName', 'lastName', 'role', 'createdAt', 'updatedAt']
+  async findAll(): Promise<Omit<User, 'password'>[]> {
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+        password: false,
+      },
     });
   }
 
@@ -71,15 +78,13 @@ export class UserService {
   }
 
   async deleteUser(id: number): Promise<void> {
-    await this.userRepository.delete(id);
+    await this.prisma.user.delete({ where: { id } });
   }
 
   async updateUserRole(id: number, role: UserRole): Promise<User> {
-    const user = await this.findById(id);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    user.role = role;
-    return this.userRepository.save(user);
+    return this.prisma.user.update({
+      where: { id },
+      data: { role },
+    });
   }
 }
