@@ -62,6 +62,7 @@ export class UserService {
         firstName: true,
         lastName: true,
         role: true,
+        tokenVersion: true,
         createdAt: true,
         updatedAt: true,
         password: false,
@@ -85,6 +86,17 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: { role },
+    });
+  }
+
+  async incrementTokenVersion(userId: number): Promise<User> {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        tokenVersion: {
+          increment: 1,
+        },
+      },
     });
   }
 }

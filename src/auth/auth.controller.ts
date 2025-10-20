@@ -149,4 +149,26 @@ export class AuthController {
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
+  @Post('users/:id/revoke-tokens')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Revoke all user tokens (Admin only)' })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'All user tokens revoked successfully'
+  })
+  @ApiResponse({ 
+    status: 401, 
+    description: 'Unauthorized' 
+  })
+  @ApiResponse({ 
+    status: 403, 
+    description: 'Forbidden - Admin access required' 
+  })
+  async revokeUserTokens(@Param('id') id: string): Promise<{ message: string }> {
+    await this.authService.revokeUserTokens(Number(id));
+    return { message: 'All user tokens have been revoked successfully' };
+  }
 }
