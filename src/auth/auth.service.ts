@@ -22,8 +22,13 @@ export class AuthService {
     const user = await this.userService.create(registerDto, UserRole.USER);
     console.log('New user registered:', registerDto);
     
-    // Generate JWT token
-    const payload = { email: user.email, sub: user.id, role: user.role };
+    // Generate JWT token with tokenVersion
+    const payload = { 
+      email: user.email, 
+      sub: user.id, 
+      role: user.role,
+      tokenVersion: user.tokenVersion 
+    };
     const access_token = this.jwtService.sign(payload);
 
     // Return user data without password
@@ -52,8 +57,13 @@ export class AuthService {
     const user = await this.userService.createAdmin(registerAdminDto);
     console.log('New admin registered:', { email: registerAdminDto.email, role: user.role });
     
-    // Generate JWT token
-    const payload = { email: user.email, sub: user.id, role: user.role };
+    // Generate JWT token with tokenVersion
+    const payload = { 
+      email: user.email, 
+      sub: user.id, 
+      role: user.role,
+      tokenVersion: user.tokenVersion 
+    };
     const access_token = this.jwtService.sign(payload);
 
     // Return user data without password and admin secret
@@ -74,8 +84,13 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Generate JWT token with role
-    const payload = { email: user.email, sub: user.id, role: user.role };
+    // Generate JWT token with role and tokenVersion
+    const payload = { 
+      email: user.email, 
+      sub: user.id, 
+      role: user.role,
+      tokenVersion: user.tokenVersion 
+    };
     const access_token = this.jwtService.sign(payload);
 
     // Return user data without password
@@ -89,5 +104,9 @@ export class AuthService {
 
   async validateUserById(id: number): Promise<User | null> {
     return this.userService.findById(id);
+  }
+
+  async revokeUserTokens(userId: number): Promise<void> {
+    await this.userService.incrementTokenVersion(userId);
   }
 }
