@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test Client</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 WebSocket Test Client</h1>
+            <p>Test WebSocket functionality with JWT authentication</p>
+        </header>
+
+        <!-- Authentication Section -->
+        <section class="auth-section">
+            <h2>🔐 Authentication</h2>
+            <div class="auth-form">
+                <input type="email" id="email" placeholder="Email" value="admin@example.com">
+                <input type="password" id="password" placeholder="Password" value="password123">
+                <button onclick="login()">Login & Get Token</button>
+                <button onclick="registerAdmin()">Register Admin</button>
+            </div>
+            <div class="token-section">
+                <label for="token">JWT Token:</label>
+                <textarea id="token" placeholder="Your JWT token will appear here..."></textarea>
+                <button onclick="connectWebSocket()">Connect WebSocket</button>
+                <button onclick="disconnectWebSocket()">Disconnect</button>
+            </div>
+            <div class="connection-status">
+                <span id="status">Disconnected</span>
+            </div>
+        </section>
+
+        <!-- WebSocket Actions -->
+        <section class="actions-section">
+            <h2>🎯 WebSocket Actions</h2>
+            
+            <!-- Room Management -->
+            <div class="action-group">
+                <h3>Room Management</h3>
+                <div class="input-group">
+                    <input type="text" id="roomName" placeholder="Room name" value="general">
+                    <button onclick="joinRoom()">Join Room</button>
+                    <button onclick="leaveRoom()">Leave Room</button>
+                </div>
+            </div>
+
+            <!-- Messaging -->
+            <div class="action-group">
+                <h3>Messaging</h3>
+                <div class="input-group">
+                    <input type="text" id="messageText" placeholder="Enter message...">
+                    <select id="messageType">
+                        <option value="room">Send to Room</option>
+                        <option value="broadcast">Broadcast to All</option>
+                        <option value="private">Private Message</option>
+                    </select>
+                    <input type="number" id="targetUserId" placeholder="Target User ID (for private)" style="display:none;">
+                    <button onclick="sendMessage()">Send Message</button>
+                </div>
+            </div>
+
+            <!-- System Actions -->
+            <div class="action-group">
+                <h3>System Actions</h3>
+                <div class="button-group">
+                    <button onclick="getOnlineUsers()">Get Online Users</button>
+                    <button onclick="ping()">Ping Server</button>
+                    <button onclick="adminBroadcast()">Admin Broadcast</button>
+                </div>
+            </div>
+
+            <!-- Admin Broadcast Input -->
+            <div id="adminBroadcastInput" style="display:none;">
+                <input type="text" id="adminMessage" placeholder="Admin message...">
+                <button onclick="sendAdminBroadcast()">Send Broadcast</button>
+            </div>
+        </section>
+
+        <!-- Logs Section -->
+        <section class="logs-section">
+            <h2>📋 Event Logs</h2>
+            <div class="log-controls">
+                <button onclick="clearLogs()">Clear Logs</button>
+                <label>
+                    <input type="checkbox" id="autoScroll" checked> Auto Scroll
+                </label>
+            </div>
+            <div id="logs" class="logs"></div>
+        </section>
+
+        <!-- Online Users -->
+        <section class="users-section">
+            <h2>👥 Online Users</h2>
+            <div id="onlineUsers" class="users-list">
+                <p class="no-users">No users online</p>
+            </div>
+        </section>
+
+        <!-- Messages -->
+        <section class="messages-section">
+            <h2>💬 Messages</h2>
+            <div id="messages" class="messages-list">
+                <p class="no-messages">No messages yet</p>
+            </div>
+        </section>
+    </div>
+
+    <script src="websocket-client.js"></script>
+</body>
+</html>
